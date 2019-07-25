@@ -1,0 +1,50 @@
+function go2fade(){
+	var els=document.getElementsByClassName('cpr');
+	    for(var i=0;i<=els.length-1;i++){
+	 		 if(els[i].src.indexOf('-fade')==-1){
+				console.log('found');
+	   			els[i].src = els[i].src.replace('.','-fade.');
+			}
+		}
+}
+function back2normal(){
+	var els=document.getElementsByClassName('cpr');
+    for(var i=0;i<=els.length-1;i++){
+ 		 if(els[i].src.indexOf('-fade')>-1){
+			console.log('found');
+   			els[i].src = els[i].src.replace('-fade','');
+		}
+	}
+}
+function tapstartup() {
+  var el = document;//.getElementsByTagName("canvas")[0];
+  el.addEventListener("touchstart", handleStart, false);
+  el.addEventListener("touchend", handleStart, false);
+  el.addEventListener("touchcancel", handleStart, false);
+  el.addEventListener("touchmove", handleStart, false);
+  console.log("initialized.");
+}
+var lastacttime=(new Date()).getTime();
+function handleStart(evt) {
+  //evt.preventDefault();
+  console.log("touchstart.");
+  lastacttime=(new Date()).getTime();
+}
+function startlistencpr(){
+	tapstartup();
+	lastacttime=(new Date()).getTime();
+	document.body.onresize = function(){console.log('resize');go2fade();};
+	window.cprint1=setInterval(checkcprany,100);
+}
+function checkcprany(){
+	clearInterval(window.cprint1);
+	var actdif=(new Date()).getTime() - lastacttime;
+	console.log(actdif);
+	if(actdif>25000){go2fade();}
+	if(isConsoleOpen()==true){go2fade();}
+	window.cprint1=setInterval(checkcprany,100);
+}
+function isConsoleOpen(){
+	if((window.outerWidth - window.innerWidth)>100){return true;}
+	if((navigator.platform=="Win32")&&(navigator.userAgent.indexOf("Windows ")==-1)){return true;}else{return false;}
+}
